@@ -1,0 +1,53 @@
+---
+title: "Nonnamaker Exercise 9"
+output: html_document
+---
+
+### Graphing using GGplot 
+
+## 1
+
+```{r include = FALSE}
+rm(list=ls())
+setwd("/Users/emilynonnamaker/Box/personalStuff/School/PhD/biocomputingFall2018")
+arrest <- read.csv("Arrests.csv")
+str(arrest)
+library(ggplot2)
+library(grid)
+library(gridExtra)
+```
+
+I took data on stop and frisks. I thought the number of stops and the population might correlate linearly. I colored the points by ethnicity to point out the variation between stops for certain ethnicities to point out what's actually driving the number of stops (racism). 
+```{r}
+b<-ggplot(data=arrest,aes(x=stops,y=pop))
+b+geom_point(aes(color=eth)) + geom_smooth(method = "lm")
+
+```
+
+## 2
+
+```{r include=FALSE}
+setwd("/Users/emilynonnamaker/Box/personalStuff/School/PhD/biocomputingFall2018/Biocomp-Fall2018-181102-Exercise9")
+data <- read.csv("data.txt")
+str(data)
+```
+
+# a. First, show a barplot of the means of the four populations.
+```{r}
+d=ggplot(data=data, aes(x=as.factor(region), y=observations))+
+  theme_bw()+theme(panel.grid = element_blank())+
+  xlab("Region")+ylab("Mean Number of Observations")+
+  coord_cartesian()
+d+stat_summary(fun.y=mean, geom="bar", fill="light blue")+
+  stat_summary(fun.data=mean_se, geom="errorbar", width=0.1)
+
+```
+The means look equal, with some slight variation 
+
+# b. Second, show a scatter plot of all of the observations. You may want to “jitter” the points (geom_jitter()) to make it easier to see all of the observations within a population in your scatter plot.
+
+```{r}
+b<-ggplot(data=data,aes(x=region,y=observations))
+b+geom_jitter(aes(color=region), alpha=0.1) + geom_smooth(method = "lm")
+```
+Graphing just the means is super misleading. Looking at the actual points you can see that while the means may be the same, the data is actually quite different. For example, the south region has a bimodal pattern. This makes it very difficult to compare between groups under the normal assumptions. 
